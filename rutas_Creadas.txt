@@ -1,0 +1,8 @@
+/asignaturas/registrar
+/asignaturas/1/editar/
+
+/academicos/registrar/
+/academicos/1/editar/
+
+/academicos/1/cargas/registrar/
+/academicos/1/cargas/editar/
