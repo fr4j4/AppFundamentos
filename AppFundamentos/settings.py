@@ -76,11 +76,10 @@ WSGI_APPLICATION = 'AppFundamentos.wsgi.application'
 DATABASES = {
 'default': {
         'ENGINE': 'django.db.backends.mysql',
-        #'read_default_file': 'config.cnf',
-        'HOST': 'localhost',
+        'HOST': 'www.fr4j4.pro',
         'NAME' : 'app_fundamentos',
-        'USER' : 'root',
-        'PASSWORD' : 'root',    
+        'USER' : 'fundamentos',
+        'PASSWORD' : 'fundamentos',    
     }
 }
 
