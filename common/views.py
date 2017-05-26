@@ -9,14 +9,13 @@ def index(request):
     return render(request,'common/index.html')
 
 def index_cargas(request):
-	return HttpResponse("Cargas")
+	return render(request,'common/cargas/index.html')
 
 def index_academicos(request):
-	return HttpResponse("academicos")
+	return render(request,'common/academicos/index.html')
 
 def index_asignaturas(request):
-	return HttpResponse("asignaturas")
-
+	return render(request,'common/asignaturas/index.html')
 
 def registro_academicos(request):
 	return HttpResponse("Registro academicos")
