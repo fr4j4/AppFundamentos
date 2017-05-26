@@ -2,5 +2,19 @@
 {% block title%}Indice{% endblock %}
 
 {% block content%}
-<legend>Academicos</legend>
+<legend>Academicos registrados</legend>
+<div class="row">
+	<div class="col">
+		<ul>
+			{% for academico in academicos %}
+			<li>{{academico}} <a href="#">[editar]</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<a href="#">[registrar nuevo]</a>
+	</div>
+</div>
 {% endblock %}

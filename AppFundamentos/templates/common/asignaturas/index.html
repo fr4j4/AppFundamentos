@@ -2,5 +2,19 @@
 {% block title%}Indice{% endblock %}
 
 {% block content%}
-<legend>Asignaturas</legend>
+<legend>Asignaturas registradas</legend>
+<div class="row">
+	<div class="col">
+		<ul>
+			{% for asignatura in asignaturas %}
+			<li>{{asignatura}} <a href="#">[editar]</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<a href="{% url "asig_nuevo" %}">[registrar nueva]</a>
+	</div>
+</div>
 {% endblock %}

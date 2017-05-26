@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^academicos/(?P<id>\d+)/editar/$', views.editar_academicos, name='acad_edit'),
     
     url(r'^asignaturas/$', views.index_asignaturas, name='asig'),
-    url(r'^asignaturas/registrar/$', views.registro_asignaturas, name='asig_reg'),
+    url(r'^asignaturas/registrar/$', views.registro_asignaturas, name='asig_nuevo'),
     url(r'^asignaturas/(?P<id>\d+)/editar/$', views.editar_asignaturas, name='asig_edit'),
 
     url(r'^academicos/cargas/$', views.index_cargas, name='carg'),

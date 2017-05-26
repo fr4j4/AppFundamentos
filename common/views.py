@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
+from .models import *
+
 # Create your views here.
 def index(request):
     return render(request,'common/index.html')
@@ -12,10 +14,19 @@ def index_cargas(request):
 	return render(request,'common/cargas/index.html')
 
 def index_academicos(request):
-	return render(request,'common/academicos/index.html')
+	academicos=Academico.objects.all();
+	context={
+		'academicos':academicos,
+	}
+	return render(request,'common/academicos/index.html',context)
 
 def index_asignaturas(request):
-	return render(request,'common/asignaturas/index.html')
+	asignaturas=Asignatura.objects.all();
+	context={
+		'asignaturas':asignaturas,
+	}
+	return render(request,'common/asignaturas/index.html',context)
+
 
 def registro_academicos(request):
 	return HttpResponse("Registro academicos")
@@ -25,7 +36,7 @@ def registro_cargas(request,id_academico):
 
 
 def registro_asignaturas(request):
-	return HttpResponse("Registro asignaturas")
+	return render(request,'common/asignaturas/new.html')
 
 
 def editar_academicos(request,id):
