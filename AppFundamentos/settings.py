@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,11 +53,17 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'AppFundamentos.urls'
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static').replace('\\','/'),
+)
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(PROJECT_ROOT, 'templates').replace('\\','/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
