@@ -46,31 +46,34 @@
 			  	</div>
 			  	</div>		  		
 		  	</div>
-
-		  	<!--div class="col-sm-offset-2 col-sm-10">
-	  		  <table class="table"> 
-			  	<thead> 
-			  		<tr><th>Asignatura</th></tr> 
-			  	</thead> 
-			  	<tbody> 
-			  		<tr><td><a href="#">[agregar asignatura]</a></td></tr> 
-			  	</tbody> 
-			  </table>
-		  	</div-->
-
 		  </div>
 		  <div class="form-group">
 		  	<div class="col-sm-offset-2 col-sm-10">
-	  		  <table class="table"> 
+	  		  <table id="tabla_cargas" class="table"> 
 			  	<thead> 
-			  		<tr><th>Cargas</th></tr> 
+			  		<th>Nombre</th>
+			  		<th>Apellido</th>
+			  		<th>R.U.T</th> 
+			  		<th></th>
 			  	</thead> 
 			  	<tbody> 
-			  		<tr><td><a href="#">[agregar carga]</a></td></tr> 
+			  		<tr>
+			  			<td>
+			  				<input class="form-control" id="nuevo_nombre" type="text">
+			  			</td>
+			  			<td>
+			  				<input class="form-control" id="nuevo_apellido" type="text">
+			  			</td>
+			  			<td>
+			  				<input class="form-control" id="nuevo_rut" type="text">
+			  			</td>
+			  			<td>
+			  				<button class="btn btn-default" type="button" id="nueva_carga" href="#"><span class="glyphicon glyphicon-plus"></span> Agregar carga</button>
+			  			</td>
+			  		</tr>
 			  	</tbody> 
 			  </table>
 		  	</div>
-
 		  </div>
 
 		  <div class="form-group">
@@ -82,5 +85,76 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	var cargas=[];
+	//al presionar el link de nueva carga
 
+
+
+	$('#nueva_carga').on('click', function(event) {
+		if(validarNuevaCarga()){
+			if(!existeCarga(getNuevaCarga())){
+				carga=getNuevaCarga()
+				cargas.push(carga);
+				boton="<btn class='btn btn-link hola' type='button' style='color:red;'>[quitar]</btn>"
+				row="<tr>";
+				row+="<td>";
+				row+=carga.nombre;
+				row+="</td>";
+				row+="<td>";
+				row+=carga.apellido;
+				row+="</td>";
+				row+="<td>";
+				row+=carga.rut;
+				row+="</td>";
+				row+="<td>";
+				row+=boton;
+				row+="</td>";
+				row+="</tr>";
+				$('#tabla_cargas tr:last').after(row);
+			}else{
+				alert("El rut de la carga ingresada ya existe, revise por favor.");
+			}
+		}else{
+			alert("Entrada no válida en nueva carga, revise por favor.");
+		}
+	});
+
+	$(".hola").on("click",function(){
+		alert("jj");
+	    //console.log($(this));
+	    //$(this).parent().parent().remove()
+	});
+
+	function validarNuevaCarga(){
+		valido=true;
+		nombre=$('#nuevo_nombre').val();
+		apellido=$('#nuevo_apellido').val();
+		rut=$('#nuevo_rut').val();
+		if(nombre==''||apellido==''||rut==''){
+			valido=false;
+		}
+		return valido;
+	}
+
+	function existeCarga(carga){
+		existe=false;
+		for (c in cargas){
+			if(cargas[c].rut===carga.rut){
+				existe=true;
+				break;
+			}
+		}
+		return existe;
+	}
+
+	function getNuevaCarga(){
+		carga={};
+		carga.nombre=$('#nuevo_nombre').val();
+		carga.apellido=$('#nuevo_apellido').val();
+		carga.rut=$('#nuevo_rut').val();
+		return carga;
+	}
+
+</script>
 {% endblock %}

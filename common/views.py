@@ -72,7 +72,7 @@ def index_asignaturas(request):
 
 def registro_asignaturas(request):
 	if(request.method=='POST'):
-
+		pass
 	else:
 		pass
 
