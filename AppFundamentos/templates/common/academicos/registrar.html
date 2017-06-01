@@ -2,30 +2,52 @@
 {% block title%}Indice{% endblock %}
 
 {% block content%}
+
 <legend>Registrar Academico</legend>
 <div class="row">
 	<div class="col">
-		<form class="form-horizontal">
+		<form class="form-horizontal" method="POST">
+		{% csrf_token %}
 		  <div class="form-group">
 		    <label for="nombre" class="col-sm-2 control-label">Nombre</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="lineedit" placeholder="Nombre Academico">
+		      <input name="nombre" type="text" class="form-control" id="lineedit" placeholder="Nombre Academico">
 		    </div>
 		  </div>
 		  <div class="form-group">
 		    <label for="apellido" class="col-sm-2 control-label">Apellido</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="lineedit" placeholder="Apellido Academico">
+		      <input name="apellido" type="text" class="form-control" id="lineedit" placeholder="Apellido Academico">
 		    </div>
 		  </div>
 		  <div class="form-group">
 		    <label for="rut" class="col-sm-2 control-label">Rut</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="lineedit" placeholder="12345678-0">
+		      <input name="rut" type="text" class="form-control" id="lineedit" placeholder="12345678-0">
 		    </div>
 		  </div>
 		  <div class="form-group">
-		  	<div class="col-sm-offset-2 col-sm-10">
+		  	<div class="col-sm-10 col-sm-offset-2">
+			  	<div class="panel panel-primary">
+			  	<div class="panel-heading">
+			  		Asignaturas
+			  	</div>
+			  	<div class="panel-body">
+			  		<div class="col-sm-10 col-sm-offset-2">
+					  	<select name="asignaturas" class="form-control">
+					  		{% for a in asignaturas%}
+					  		<option value="{{a.id}}">{{ a.nombre }}</option>
+							{% endfor %}
+					  	</select>
+			  		</div>
+			  	</div>
+			  	<div class="panel-footer">
+			  		Puede escoger ninguna, una o todas
+			  	</div>
+			  	</div>		  		
+		  	</div>
+
+		  	<!--div class="col-sm-offset-2 col-sm-10">
 	  		  <table class="table"> 
 			  	<thead> 
 			  		<tr><th>Asignatura</th></tr> 
@@ -34,7 +56,7 @@
 			  		<tr><td><a href="#">[agregar asignatura]</a></td></tr> 
 			  	</tbody> 
 			  </table>
-		  	</div>
+		  	</div-->
 
 		  </div>
 		  <div class="form-group">
