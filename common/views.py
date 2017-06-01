@@ -41,7 +41,11 @@ def editar_asignaturas(request,id):
 ################################################################################
 
 def index_cargas(request):
-	return render(request,'common/cargas/index.html')
+	cargas=Carga.objects.all();
+	context={
+		'cargas':cargas,
+	}
+	return render(request,'common/cargas/index.html',context)
 
 def registro_cargas(request,id_academico):
 	return HttpResponse("Registro cargas academico_id={0}".format(id_academico))
