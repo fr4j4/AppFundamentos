@@ -71,6 +71,11 @@ def index_asignaturas(request):
 	return render(request,'common/asignaturas/index.html',context)
 
 def registro_asignaturas(request):
+	if(request.method=='POST'):
+
+	else:
+		pass
+
 	return render(request,'common/asignaturas/new.html')
 
 def editar_asignaturas(request,id):
