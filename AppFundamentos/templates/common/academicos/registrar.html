@@ -57,7 +57,7 @@
 			  		<th></th>
 			  	</thead> 
 			  	<tbody> 
-			  		<tr>
+			  		<tr mantener="si">
 			  			<td>
 			  				<input class="form-control" id="nuevo_nombre" type="text">
 			  			</td>
@@ -87,43 +87,21 @@
 </div>
 <script type="text/javascript">
 	var cargas=[];
+	renderizar_tabla();
 	//al presionar el link de nueva carga
-
-
 
 	$('#nueva_carga').on('click', function(event) {
 		if(validarNuevaCarga()){
 			if(!existeCarga(getNuevaCarga())){
 				carga=getNuevaCarga()
 				cargas.push(carga);
-				boton="<btn class='btn btn-link hola' type='button' style='color:red;'>[quitar]</btn>"
-				row="<tr>";
-				row+="<td>";
-				row+=carga.nombre;
-				row+="</td>";
-				row+="<td>";
-				row+=carga.apellido;
-				row+="</td>";
-				row+="<td>";
-				row+=carga.rut;
-				row+="</td>";
-				row+="<td>";
-				row+=boton;
-				row+="</td>";
-				row+="</tr>";
-				$('#tabla_cargas tr:last').after(row);
+				renderizar_tabla();
 			}else{
 				alert("El rut de la carga ingresada ya existe, revise por favor.");
 			}
 		}else{
 			alert("Entrada no válida en nueva carga, revise por favor.");
 		}
-	});
-
-	$(".hola").on("click",function(){
-		alert("jj");
-	    //console.log($(this));
-	    //$(this).parent().parent().remove()
 	});
 
 	function validarNuevaCarga(){
@@ -154,6 +132,50 @@
 		carga.apellido=$('#nuevo_apellido').val();
 		carga.rut=$('#nuevo_rut').val();
 		return carga;
+	}
+
+	function quitarCarga(carga_rut){
+		eliminado=false;
+		for(i in cargas){
+			c=cargas[i];
+			if(c.rut===carga_rut){
+				cargas.splice(i,1);
+				eliminado=true;
+				renderizar_tabla();
+				break;
+			}
+		}
+		return eliminado;
+	}
+
+	function renderizar_tabla(){
+			console.log("render");
+			$("#tabla_cargas > tbody >tr").each(function(){
+				if(!$(this).attr("mantener")){
+					$(this).remove();
+				}
+			});
+			console.log("flag1");
+			for(i in cargas){
+				console.log("flag2");
+				carga=cargas[i];
+				boton="<button onClick='quitarCarga(\""+carga.rut+"\")' type='button' style='color:red;'>[quitar]</button>"
+				row="<tr>";
+				row+="<td>";
+				row+=carga.nombre;
+				row+="</td>";
+				row+="<td>";
+				row+=carga.apellido;
+				row+="</td>";
+				row+="<td>";
+				row+=carga.rut;
+				row+="</td>";
+				row+="<td>";
+				row+=boton;
+				row+="</td>";
+				row+="</tr>";
+				$('#tabla_cargas tr:last').after(row);
+		}
 	}
 
 </script>
