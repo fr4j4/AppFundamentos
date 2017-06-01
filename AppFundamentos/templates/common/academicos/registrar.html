@@ -30,19 +30,19 @@
 		  	<div class="col-sm-10 col-sm-offset-2">
 			  	<div class="panel panel-primary">
 			  	<div class="panel-heading">
-			  		Asignaturas
+			  		<label for="asignaturas">Asignaturas</label>
 			  	</div>
 			  	<div class="panel-body">
 			  		<div class="col-sm-10 col-sm-offset-2">
-					  	<select name="asignaturas" class="form-control">
+					  	<select multiple name="asignaturas" class="form-control">
 					  		{% for a in asignaturas%}
-					  		<option value="{{a.id}}">{{ a.nombre }}</option>
+					  		<option value="{{a.id}}" >{{ a.nombre }}</option>
 							{% endfor %}
 					  	</select>
 			  		</div>
 			  	</div>
 			  	<div class="panel-footer">
-			  		Puede escoger ninguna, una o todas
+			  		Puede escoger ninguna, una, varias (<kbd>ctrl</kbd>+<kbd>CLICK</kbd>) o todas
 			  	</div>
 			  	</div>		  		
 		  	</div>

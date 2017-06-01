@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+
+from django.utils.html import escape
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
@@ -37,11 +40,19 @@ def registro_academicos(request):
 			nombre=formulario.cleaned_data['nombre']
 			apellido=formulario.cleaned_data['apellido']
 			rut=formulario.cleaned_data['rut']
-			salida=("Nombre: {0}<br>"
-					"Apellido: {1}<br>"
-					"R.U.T: {2}<br>"
-			).format(nombre,apellido,rut)
-			return HttpResponse(salida);
+			asignaturas=request.POST.getlist('asignaturas')
+
+			academico=Academico()
+			academico.nombre=nombre
+			academico.apellido=apellido
+			academico.rut=rut
+			academico.save()
+
+			for asig_id in asignaturas:
+				asignatura=Asignatura.objects.get(id=asig_id)
+				academico.asignaturas.add(asignatura);
+
+			return index_academicos(request)
 		else:
 			return HttpResponse("problemas con el formulario");
 	else:
