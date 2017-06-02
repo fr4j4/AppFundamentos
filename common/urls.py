@@ -15,6 +15,8 @@ urlpatterns = [
 
     url(r'^academicos/cargas/$', views.index_cargas, name='carg'),
     url(r'^academicos/(?P<id_academico>\d+)/cargas/registrar/$', views.registro_cargas, name='carg_reg'),
-	url(r'^academicos/(?P<id_academico>\d+)/cargas/editar/$', views.editar_cargas, name='carg_edit'),
+    url(r'^academicos/(?P<id_academico>\d+)/cargas/editar/$', views.editar_cargas, name='carg_edit'),
     
+    #usando ajax
+    url(r'^ajax/academicos/registrar/$', views.registro_academicos_ajax, name='acad_reg_ajax'),
 ]

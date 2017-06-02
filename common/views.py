@@ -4,11 +4,13 @@ from __future__ import unicode_literals
 
 from django.utils.html import escape
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.template import loader
 
 from .models import *
 from .formulariosWeb import *
+import json
+#from django.utils import simplejson
 # Create your views here.
 
 #metodos
@@ -33,10 +35,11 @@ def registro_academicos(request):
 			'asignaturas':asignaturas
 		}
 		return render(request,'common/academicos/registrar.html',context)
-	#POST
+	#POST - recibir un ajax con toda la informacion
 	elif(request.method=='POST'):
 		formulario=nuevo_academico_form(request.POST)
 		if formulario.is_valid():
+			'''
 			nombre=formulario.cleaned_data['nombre']
 			apellido=formulario.cleaned_data['apellido']
 			rut=formulario.cleaned_data['rut']
@@ -53,10 +56,66 @@ def registro_academicos(request):
 				academico.asignaturas.add(asignatura);
 
 			return index_academicos(request)
+			'''
+			cargas=request.POST.getlist('cargas[]')
+			return HttpResponse(request.body)
 		else:
 			return HttpResponse("problemas con el formulario");
 	else:
 		pass
+
+def registro_academicos_ajax(request):
+	if(request.is_ajax()):
+		#jinput=json.loads(request.body)
+		jinput=json.loads(request.body)
+		if(validateJSON(jinput)):
+			academico=Academico()
+			academico.nombre=jinput['academico']['nombre']
+			academico.apellido=jinput['academico']['apellido']
+			academico.rut=jinput['academico']['rut']
+			academico.save();
+			for i in jinput['asignaturas']:
+				asig_id=i
+				asignatura=Asignatura.objects.get(id=asig_id)
+				academico.asignaturas.add(asignatura);
+			for i in jinput['cargas']:
+				carga=Carga(academco=academico)
+				carga.nombre=i['nombre']
+				carga.apellido=i['apellido']
+				carga.rut=i['rut']
+				carga.save()
+
+			return JsonResponse({"result":"yes"})
+		else:
+			return JsonResponse({"result":"NO"})
+	else:
+		return HttpResponse("Get out!")
+
+def validateJSON(_json):
+	valido =True
+	if(not _json['academico']['nombre'] or
+		not _json['academico']['apellido'] or
+		not _json['academico']['rut']):
+		valido=False;
+	else:
+		for i in _json['cargas']:
+			carga=Carga()
+			carga.nombre=i['nombre']
+			carga.apellido=i['apellido']
+			carga.rut=i['rut']
+			'''
+			print "nombre: ",carga['nombre']
+			print "apellido: ",carga['apellido']
+			print "rut: ",carga['rut']
+			'''
+			if(not carga.nombre or
+			   not carga.apellido or
+			   not carga.rut
+			):
+				valido=False
+				break
+
+	return valido
 
 def editar_academicos(request,id):
 	return HttpResponse("Editar academicos id_academico={0}".format(id))

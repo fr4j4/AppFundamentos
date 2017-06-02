@@ -6,24 +6,26 @@
 <legend>Registrar Academico</legend>
 <div class="row">
 	<div class="col">
-		<form class="form-horizontal" method="POST">
+		<form class="form-horizontal" method="POST" onsubmit=" return submitHandler()">
 		{% csrf_token %}
+			<div id="cargas_">
+			</div>
 		  <div class="form-group">
 		    <label for="nombre" class="col-sm-2 control-label">Nombre</label>
 		    <div class="col-sm-10">
-		      <input name="nombre" type="text" class="form-control" id="lineedit" placeholder="Nombre Academico">
+		      <input name="nombre" type="text" class="form-control" id="nombre" placeholder="Nombre Academico">
 		    </div>
 		  </div>
 		  <div class="form-group">
 		    <label for="apellido" class="col-sm-2 control-label">Apellido</label>
 		    <div class="col-sm-10">
-		      <input name="apellido" type="text" class="form-control" id="lineedit" placeholder="Apellido Academico">
+		      <input name="apellido" type="text" class="form-control" id="apellido" placeholder="Apellido Academico">
 		    </div>
 		  </div>
 		  <div class="form-group">
 		    <label for="rut" class="col-sm-2 control-label">Rut</label>
 		    <div class="col-sm-10">
-		      <input name="rut" type="text" class="form-control" id="lineedit" placeholder="12345678-0">
+		      <input name="rut" type="text" class="form-control" id="rut" placeholder="12345678-0">
 		    </div>
 		  </div>
 		  <div class="form-group">
@@ -34,7 +36,7 @@
 			  	</div>
 			  	<div class="panel-body">
 			  		<div class="col-sm-10 col-sm-offset-2">
-					  	<select multiple name="asignaturas" class="form-control">
+					  	<select id="select_asignaturas" multiple name="asignaturas" class="form-control">
 					  		{% for a in asignaturas%}
 					  		<option value="{{a.id}}" >{{ a.nombre }}</option>
 							{% endfor %}
@@ -88,6 +90,7 @@
 <script type="text/javascript">
 	var cargas=[];
 	renderizar_tabla();
+	var settings;
 	//al presionar el link de nueva carga
 
 	$('#nueva_carga').on('click', function(event) {
@@ -149,15 +152,12 @@
 	}
 
 	function renderizar_tabla(){
-			console.log("render");
 			$("#tabla_cargas > tbody >tr").each(function(){
 				if(!$(this).attr("mantener")){
 					$(this).remove();
 				}
 			});
-			console.log("flag1");
 			for(i in cargas){
-				console.log("flag2");
 				carga=cargas[i];
 				boton="<button onClick='quitarCarga(\""+carga.rut+"\")' type='button' style='color:red;'>[quitar]</button>"
 				row="<tr>";
@@ -176,6 +176,44 @@
 				row+="</tr>";
 				$('#tabla_cargas tr:last').after(row);
 		}
+	}
+
+	function submitHandler(){
+		var data={};
+		data.academico={
+			nombre:$("#nombre").val(),
+			apellido:$("#apellido").val(),
+			rut:$("#rut").val(),
+		};
+		data.cargas=cargas;
+		data.asignaturas=[]
+		$('#select_asignaturas :selected').each(function(){
+			data.asignaturas.push($(this).val());
+		});
+		settings = {
+		  async: true,
+		  crossDomain: true,
+		  url: "{% url "acad_reg_ajax" %}",
+		  method: "POST",
+		  data:JSON.stringify(data),
+		  dataType:"JSON",
+		  contentType: "application/json",
+		  headers: {
+			"cache-control": "no-cache",
+		    "X-Requested-With":"XMLHttpRequest",//importante para que sea detectado como AJAX
+		    "X-CSRFToken":$('input[name=csrfmiddlewaretoken]').val(),
+		  }
+		}
+
+		$.ajax(settings).done(function (response) {
+			if(response['result']==='yes'){
+				window.location.href='{% url "acad"%}';
+			}else{
+				alert("Datos faltantes o no válidos, por favor revisar");
+			}
+		});
+
+		return false;
 	}
 
 </script>
