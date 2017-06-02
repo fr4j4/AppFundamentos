@@ -3,8 +3,24 @@
 
 {% block content%}
 
+<style type="text/css">
+	.spinner {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
 <legend>Registrar Academico</legend>
-<div class="row">
+<div  class="row">
 	<div class="col">
 		<form class="form-horizontal" method="POST" onsubmit=" return submitHandler()">
 		{% csrf_token %}
@@ -85,6 +101,11 @@
 		    </div>
 		  </div>
 		</form>
+		<div id="loader" style="display: none">
+			<span id="loader_text">Enviando formulario...</span>
+	      	<div class="spinner">
+	      	</div>	
+		</div>
 	</div>
 </div>
 <script type="text/javascript">
@@ -178,7 +199,7 @@
 		}
 	}
 
-	function submitHandler(){
+	function send_data(){
 		var data={};
 		data.academico={
 			nombre:$("#nombre").val(),
@@ -204,15 +225,23 @@
 		    "X-CSRFToken":$('input[name=csrfmiddlewaretoken]').val(),
 		  }
 		}
-
+		$("#loader_text").html("Esperando respuesta...");
 		$.ajax(settings).done(function (response) {
 			if(response['result']==='yes'){
 				window.location.href='{% url "acad"%}';
 			}else{
+				$(".form-horizontal").css('display', 'block');
+				$("#loader").css('display', 'none');
 				alert("Datos faltantes o no válidos, por favor revisar");
 			}
 		});
+	}
 
+	function submitHandler(){
+		$("#loader_text").html("Enviando formulario...");
+		send_data();
+		$(".form-horizontal").css('display', 'none');
+		$("#loader").css('display', 'block');
 		return false;
 	}
 

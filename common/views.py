@@ -37,9 +37,10 @@ def registro_academicos(request):
 		return render(request,'common/academicos/registrar.html',context)
 	#POST - recibir un ajax con toda la informacion
 	elif(request.method=='POST'):
+		return HttpResponse("Oops")
+		'''
 		formulario=nuevo_academico_form(request.POST)
 		if formulario.is_valid():
-			'''
 			nombre=formulario.cleaned_data['nombre']
 			apellido=formulario.cleaned_data['apellido']
 			rut=formulario.cleaned_data['rut']
@@ -56,11 +57,12 @@ def registro_academicos(request):
 				academico.asignaturas.add(asignatura);
 
 			return index_academicos(request)
-			'''
+			
 			cargas=request.POST.getlist('cargas[]')
 			return HttpResponse(request.body)
 		else:
 			return HttpResponse("problemas con el formulario");
+			'''
 	else:
 		pass
 
