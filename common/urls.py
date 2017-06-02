@@ -19,4 +19,5 @@ urlpatterns = [
     
     #usando ajax
     url(r'^ajax/academicos/registrar/$', views.registro_academicos_ajax, name='acad_reg_ajax'),
+    url(r'^ajax/academicos/editar/$', views.editar_academico_ajax, name='acad_edit_ajax'),
 ]

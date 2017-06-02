@@ -7,7 +7,7 @@
 	<div class="col">
 		<ul>
 			{% for academico in academicos %}
-			<li>{{academico}} <a href="#">[editar]</a></li>
+			<li>{{academico}} <a href="{% url 'acad_edit' id=academico.id%}">[editar]</a></li>
 			{% endfor %}
 		</ul>
 	</div>
