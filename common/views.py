@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 
 from django.utils.html import escape
-from django.shortcuts import render
+from django.shortcuts import *
 from django.http import HttpResponse,JsonResponse
 from django.template import loader
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import *
 from .formulariosWeb import *
@@ -38,31 +39,6 @@ def registro_academicos(request):
 	#POST - recibir un ajax con toda la informacion
 	elif(request.method=='POST'):
 		return HttpResponse("Oops")
-		'''
-		formulario=nuevo_academico_form(request.POST)
-		if formulario.is_valid():
-			nombre=formulario.cleaned_data['nombre']
-			apellido=formulario.cleaned_data['apellido']
-			rut=formulario.cleaned_data['rut']
-			asignaturas=request.POST.getlist('asignaturas')
-
-			academico=Academico()
-			academico.nombre=nombre
-			academico.apellido=apellido
-			academico.rut=rut
-			academico.save()
-
-			for asig_id in asignaturas:
-				asignatura=Asignatura.objects.get(id=asig_id)
-				academico.asignaturas.add(asignatura);
-
-			return index_academicos(request)
-			
-			cargas=request.POST.getlist('cargas[]')
-			return HttpResponse(request.body)
-		else:
-			return HttpResponse("problemas con el formulario");
-			'''
 	else:
 		pass
 
@@ -182,14 +158,39 @@ def index_asignaturas(request):
 
 def registro_asignaturas(request):
 	if(request.method=='POST'):
-		pass
-	else:
-		pass
+		nombre = request.POST['nombre']
+		codigo = request.POST['codigo']	
+		try:
+			asig = Asignatura.objects.get(codigo=codigo)
+			return HttpResponse('<h1> El código de la asignatura ya existe <h1/>')
+		except ObjectDoesNotExist:
+			asig = None
+		asig = Asignatura(codigo=codigo, nombre=nombre)
+		asig.save()
+		return redirect('asig') 
 
 	return render(request,'common/asignaturas/new.html')
 
 def editar_asignaturas(request,id):
-	return HttpResponse("Editar asignaturas id_asignatura={0}".format(id))
+	if(request.method == 'GET'):
+		asig = get_object_or_404(Asignatura, id=id)
+		return render(request, 'common/asignaturas/edit.html', {'asig': asig})
+
+	if(request.method == 'POST'):
+		asig = get_object_or_404(Asignatura, id=id)
+		if(request.POST['codigo'] == asig.codigo):
+			existe=Asignatura.objects.filter(codigo__iexact=request.POST['codigo']).count()-1
+		else:
+			existe=Asignatura.objects.filter(codigo__iexact=request.POST['codigo']).count()
+		if existe>0:
+			return HttpResponse('<h1> El código de la asignatura ya existe<h1/>')
+		else:
+			asig.nombre = request.POST['nombre']
+			asig.codigo = request.POST['codigo']
+			asig.save()
+			return redirect('asig')
+
+	
 
 ################################################################################
 
@@ -205,5 +206,6 @@ def registro_cargas(request,id_academico):
 
 def editar_cargas(request,id_academico):
 	return HttpResponse("Editar cargas id_academico ={0}".format(id_academico))
+
 
 
