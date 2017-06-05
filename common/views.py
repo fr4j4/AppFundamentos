@@ -160,14 +160,13 @@ def registro_asignaturas(request):
 	if(request.method=='POST'):
 		nombre = request.POST['nombre']
 		codigo = request.POST['codigo']	
-		try:
-			asig = Asignatura.objects.get(codigo=codigo)
-			return HttpResponse('<h1> El código de la asignatura ya existe <h1/>')
-		except ObjectDoesNotExist:
-			asig = None
-		asig = Asignatura(codigo=codigo, nombre=nombre)
-		asig.save()
-		return redirect('asig') 
+		existe=Asignatura.objects.filter(codigo__iexact=request.POST['codigo']).count()
+		if(existe>0):
+			return render(request, 'common/asignaturas/existe.html')
+		else:
+			asig = Asignatura(codigo=codigo, nombre=nombre)
+			asig.save()
+			return redirect('asig') 
 
 	return render(request,'common/asignaturas/new.html')
 
@@ -183,7 +182,7 @@ def editar_asignaturas(request,id):
 		else:
 			existe=Asignatura.objects.filter(codigo__iexact=request.POST['codigo']).count()
 		if existe>0:
-			return HttpResponse('<h1> El código de la asignatura ya existe<h1/>')
+			return render(request, 'common/asignaturas/existe.html')
 		else:
 			asig.nombre = request.POST['nombre']
 			asig.codigo = request.POST['codigo']
