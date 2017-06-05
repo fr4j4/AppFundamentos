@@ -147,6 +147,11 @@ def editar_academicos(request,id):
 	else:
 		return HttpResponse("Metodo http no soportado, usar POST")
 
+def eliminar_academicos(request,id):
+	if(request.method == 'GET'):
+		acad = get_object_or_404(Academico, id=id)
+		acad.delete()
+	return redirect('acad')
 ################################################################################
 
 def index_asignaturas(request):
@@ -189,7 +194,11 @@ def editar_asignaturas(request,id):
 			asig.save()
 			return redirect('asig')
 
-	
+def eliminar_asignatura(request,id):
+	if(request.method == 'GET'):
+		asig = get_object_or_404(Asignatura, id=id)
+		asig.delete()
+		return redirect('asig')
 
 ################################################################################
 
